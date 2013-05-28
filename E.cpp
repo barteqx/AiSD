@@ -18,7 +18,7 @@ struct Section {
 };
 
 
-bool cmp (Point p1, Point p2){
+bool cmp (Point p1, Point p2) {
    return p1.y < p2.y;
 }
 
@@ -69,7 +69,7 @@ int main() {
       points.push_back(Point(c, d, i, v, true));
    }
 
-   std::sort (points.begin(), points.end(), cmp);
+   std::sort(points.begin(), points.end(), cmp);
    int last = 0, curr = 0;
    for(int i = 0; i < points.size(); i++) {
       if(points[i].y > last) {
@@ -79,7 +79,7 @@ int main() {
       points[i].y = curr;
    }
 
-   std::sort (points.begin(), points.end(), cmp2);
+   std::sort(points.begin(), points.end(), cmp2);
    beginings.reserve(2*n);
    for(int i = 0; i < n; i++) {
       beginings.push_back(Section(points[2*i].y, points[2*i+1].y, points[2*i].x, points[2*i].val));
