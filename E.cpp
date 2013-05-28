@@ -22,7 +22,7 @@ bool cmp (Point p1, Point p2) {
    return p1.y < p2.y;
 }
 
-bool cmp2 (Point p1, Point p2){
+bool cmp2 (Point p1, Point p2) {
    if (p1.sq == p2.sq && !p1.end && p2.end) return true;
    if (p1.sq < p2.sq) return true;
    return false;
