@@ -2,14 +2,7 @@
 #include <iostream>
 #include <algorithm>
 
-#define MAXTABLE 262144
-
-struct Square {
-   int x1, x2, y1, y2, val;
-   Square(int a, int b, int c, int d, int v)
-   : x1(a), y1(b), x2(c), y2(d), val(v) {} 
-   Square() {}
-};
+#define MAXTABLE 524288
 
 struct Point {
    int x, y, sq, val;
@@ -27,6 +20,12 @@ struct Section {
 
 bool cmp (Point p1, Point p2){
    return p1.y < p2.y;
+}
+
+bool cmp2 (Point p1, Point p2){
+   if (p1.sq == p2.sq && !p1.end && p2.end) return true;
+   if (p1.sq < p2.sq) return true;
+   return false;
 }
 
 bool cmp_sec (Section s1, Section s2) {
@@ -47,7 +46,7 @@ void dfs(int k, int a, int b, int x, int y, int val) {
 }
 
 void insert(int a, int b, int val) {
-   dfs(1, 0, 131071, a, b, val);
+   dfs(1, 0, 262143, a, b, val);
 }
 
 int main() {
@@ -56,10 +55,7 @@ int main() {
    int n, max_val = 0;
 
    std::cin >> n;
-   
    std::vector<Point> points;
-   
-   Square squares[n];
 
    for (int i = 0; i <= MAXTABLE; i++) {
       current[i] = 0;
@@ -68,13 +64,13 @@ int main() {
 
    for (int i = 0; i < n; i++) {
       int a, b, c, d, v;
-      std::cin >> a >> b >> c >> d;
-      points.push_back(Point(a, b, i, 1, false));
-      points.push_back(Point(c, d, i, 1, true));
+      std::cin >> a >> b >> c >> d >> v;
+      points.push_back(Point(a, b, i, v, false));
+      points.push_back(Point(c, d, i, v, true));
    }
 
    std::sort (points.begin(), points.end(), cmp);
-   int last = points[0].y, curr = 0;
+   int last = 0, curr = 0;
    for(int i = 0; i < points.size(); i++) {
       if(points[i].y > last) {
          last = points[i].y;
@@ -83,30 +79,13 @@ int main() {
       points[i].y = curr;
    }
 
-
-   for (int i = 0; i < points.size(); i++) {
-      Point sq = points[i];
-      if (!sq.end) {
-         squares[sq.sq].x1 = sq.x;
-         squares[sq.sq].y1 = sq.y;
-         squares[sq.sq].val = sq.val;
-      }
-      else {
-         squares[sq.sq].x2 = sq.x;
-         squares[sq.sq].y2 = sq.y;
-         squares[sq.sq].val = sq.val;
-      }
-   }
-
+   std::sort (points.begin(), points.end(), cmp2);
    beginings.reserve(2*n);
    for(int i = 0; i < n; i++) {
-      beginings.push_back(Section(squares[i].y1, squares[i].y2, squares[i].x1, squares[i].val));
-      beginings.push_back(Section(squares[i].y1, squares[i].y2, squares[i].x2, squares[i].val*(-1)));
-      //std::cout << squares[i].y1 << ' ' << squares[i].y2 << ' ' << squares[i].x1 << ' ' <<squares[i].x2 <<' ' << squares[i].val << std::endl;
+      beginings.push_back(Section(points[2*i].y, points[2*i+1].y, points[2*i].x, points[2*i].val));
+      beginings.push_back(Section(points[2*i].y, points[2*i+1].y, points[2*i+1].x, points[2*i].val*(-1)));
    }
-
    std::sort(beginings.begin(), beginings.end(), cmp_sec);
-
    for(int i = 0; i < beginings.size(); i++) {
       insert(beginings[i].y1, beginings[i].y2, beginings[i].val);  
       if (max[1] > max_val) max_val = max[1];
