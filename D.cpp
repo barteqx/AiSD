@@ -13,14 +13,16 @@ struct Rule1 {
 	unsigned char out1;
 	unsigned char out2;
 
-	Rule1(unsigned char x, unsigned char y, unsigned char z) : in(translate(x)), out1(translate(y)), out2(translate(z)) {}
+	Rule1(unsigned char x, unsigned char y, unsigned char z) 
+		: in(translate(x)), out1(translate(y)), out2(translate(z)) {}
 };
 
 struct Rule2 {
 	unsigned char in;
 	char out;
 
-	Rule2(unsigned char x, char y) : in(translate(x)), out(y) {}
+	Rule2(unsigned char x, char y) 
+		: in(translate(x)), out(y) {}
 };
 
 std::vector<Rule1> rules1;
